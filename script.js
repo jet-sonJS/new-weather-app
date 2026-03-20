@@ -23,12 +23,12 @@
 // https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current_weather=true
 
 // Suggested object properties needed
-/*
-    weather-code
-    temperature
-    apparent-temperature
+/* {
+    weather-code,
+    temperature,
+    apparent-temperature,
     is-day
-*/ 
+} */
 
 // Sample fetch API function
 /* fetch(`https://geocoding-api.open-meteo.com/v1/search?name={userLocation}&count=1`)
