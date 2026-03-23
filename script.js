@@ -13,25 +13,62 @@ document.addEventListener("DOMContentLoaded", () => {
     locationInput.value = "";
 });
 
-const apiKey = "4d8fb5b93d4af21d66a2948710284366";
 function getWeather() {
-    // const api = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=metric`;
+    
+const weatherCodeMap = {
+  0: "Clear sky",
+  1: "Mostly clear",
+  2: "Partly cloudy",
+  3: "Overcast",
 
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${locationInput.value}&appid=${apiKey}&units=metric`)
-    .then(res => res.json())
-    .then(data => {
-        console.log(locationInput.value);
-        console.log(data.main);
-        // const temp = data.main.temp;
-        // const feels_like = data.main.feels_like;
-        // const desc = data[0].description;
-        // // ...
+  45: "Fog",
 
-        // weatherDesc.innerHTML = desc;
-        // temperature.innerHTML = temp;
-        // apparentTemperature.innerHTML = feels_like;
-    })
-    .catch(err => console.error(err));
+  51: "Light drizzle",
+  53: "Moderate drizzle",
+  55: "Heavy drizzle",
+
+  61: "Light rain",
+  63: "Moderate rain",
+  65: "Heavy rain",
+
+  71: "Light snow",
+  73: "Moderate snow",
+  75: "Heavy snow",
+
+  80: "Light rain showers",
+  81: "Moderate rain showers",
+  82: "Heavy rain showers",
+
+  95: "Thunderstorm",
+  96: "Thunderstorm with light hail",
+  99: "Thunderstorm with heavy hail"
 };
 
-getWeatherBtn.onclick = getWeather();
+fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${locationInput.value}&count=1`)
+  .then(res => res.json())
+  .then(geo => {
+    if (!geo.results) {
+      console.log("City not found");
+      return;
+    }
+
+    const { latitude, longitude } = geo.results[0];
+
+        const api = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=sunrise,weather_code,sunset,temperature_2m_mean&hourly=is_day&current=temperature_2m,is_day,apparent_temperature,weather_code`;
+
+    fetch(api)
+    .then(res => res.json())
+    .then(weather => {
+        console.log(weather);
+        const code = weather.current.weather_code;
+        const description = weatherCodeMap[code] ?? "Unknown weather";
+        weatherDesc.textContent = `Weather: ${description}`;
+        temperature.textContent = `Temperature: ${weather.current.temperature_2m}°C`;
+        apparentTemperature.textContent = `Feels Like: ${weather.current.apparent_temperature}°C`;
+        // ...
+    })
+    .catch(err => console.error(err));
+});
+};
+
+getWeatherBtn.onclick = getWeather;
