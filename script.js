@@ -1,53 +1,37 @@
-// Using Open Meteo API
+const locationInput = document.getElementById("location-input");
+const getWeatherBtn = document.getElementById("get-weather-btn");
 
-// Weather codes translated
-/* { 
-  "0": "Clear sky",
-  "1": "Mainly clear",
-  "2": "Partly cloudy",
-  "3": "Overcast",
+const resultsContainer = document.getElementById("results");
 
-  "45": "Fog",
+const weatherDesc = document.getElementById("weather-description");
+const temperature = document.getElementById("temperature");
+const apparentTemperature = document.getElementById("apparent-temperature");
+// ...
 
-  "51": "Drizzle",
-  "61": "Rain",
-  "71": "Snow",
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("DOM Content loaded successfully.");
+    locationInput.value = "";
+});
 
-  "80": "Rain showers",
+const apiKey = "4d8fb5b93d4af21d66a2948710284366";
+function getWeather() {
+    // const api = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=metric`;
 
-  "95": "Thunderstorm"
-} */
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${locationInput.value}&appid=${apiKey}&units=metric`)
+    .then(res => res.json())
+    .then(data => {
+        console.log(locationInput.value);
+        console.log(data.main);
+        // const temp = data.main.temp;
+        // const feels_like = data.main.feels_like;
+        // const desc = data[0].description;
+        // // ...
 
-// APIs needed
-// https://geocoding-api.open-meteo.com/v1/search?name={location}&count=1
-// https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current_weather=true
+        // weatherDesc.innerHTML = desc;
+        // temperature.innerHTML = temp;
+        // apparentTemperature.innerHTML = feels_like;
+    })
+    .catch(err => console.error(err));
+};
 
-// Suggested object properties needed
-/* {
-    weather-code,
-    temperature,
-    apparent-temperature,
-    is-day
-} */
-
-// Sample fetch API function
-/* fetch(`https://geocoding-api.open-meteo.com/v1/search?name={userLocation}&count=1`)
-  .then(res => res.json())
-  .then(geo => {
-    if (!geo.results) {
-      console.log("City not found");
-      return;
-    }
-
-    const { latitude, longitude } = geo.results[0];
-
-    return fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`
-    );
-  })
-  .then(res => res && res.json())
-  .then(weather => {
-    if (!weather) return;
-
-    console.log(weather.current_weather);
-  }); */
+getWeatherBtn.onclick = getWeather();
