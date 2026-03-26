@@ -1,1 +1,94 @@
-/* Nothing to see here... */
+@import url("https://fonts.googleapis.com/css?family=Agbalumo");
+@import url("https://fonts.googleapis.com/css?family=Afacad Flux");
+
+body {
+    font-family: 'Agbalumo', sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+}
+
+#container {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    width: 92vw;
+    height: 88vh;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    font-family: 'Agbalumo', sans-serif;
+}
+
+#location-input {
+    padding: 15px;
+    width: 40%;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    margin-right: -200px;
+    margin-left: -200px;
+    font-family: 'Afacad Flux', sans-serif;
+    font-size: 15px;
+}
+
+#location-input:focus {
+    outline: none;
+    border-color: #007BFF;
+}
+
+#get-weather-btn {
+    padding: 13.5px 15px;
+    border: none;
+    border-radius: 2px;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    font-family: 'Agbalumo', sans-serif;
+}
+
+#get-weather-btn:hover {
+    background-color: #0056b3;
+}
+
+#get-weather-btn:focus {
+    outline: 4px solid #4ba2ffc6;
+}
+
+#custom-dropdown-container {
+    position: relative;
+    margin-top: 10px;
+}
+
+#custom-dropdown {
+    position: absolute;
+    top: 60%;
+    left: 237px;
+    width: 50%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+#custom-dropdown.hidden {
+    display: none;
+}
+
+#custom-dropdown li {
+    padding: 10px;
+    cursor: pointer;
+    font-family: 'Afacad Flux', sans-serif;
+    font-size: 14px;
+    color: #333;
+}
+
+#custom-dropdown li:hover {
+    background-color: #007BFF;
+    color: #fff;
+}

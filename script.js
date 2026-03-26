@@ -1,11 +1,45 @@
 const locationInput = document.getElementById("location-input");
+const customDropdown = document.getElementById("custom-dropdown");
+
+locationInput.addEventListener("input", () => {
+    const filter = locationInput.value.toLowerCase();
+    const options = customDropdown.getElementsByTagName("li");
+
+    let hasVisibleOptions = false;
+    for (let option of options) {
+        if (option.textContent.toLowerCase().includes(filter)) {
+            option.style.display = "block";
+            hasVisibleOptions = true;
+        } else {
+            option.style.display = "none";
+        }
+    }
+
+    customDropdown.classList.toggle("hidden", !hasVisibleOptions);
+});
+
+customDropdown.addEventListener("click", (event) => {
+    if (event.target.tagName === "LI") {
+        locationInput.value = event.target.textContent;
+        customDropdown.classList.add("hidden");
+    }
+});
+
+document.addEventListener("click", (event) => {
+    if (!customDropdown.contains(event.target) && event.target !== locationInput) {
+        customDropdown.classList.add("hidden");
+    }
+});
+
 const getWeatherBtn = document.getElementById("get-weather-btn");
 
 const resultsContainer = document.getElementById("results");
 
+const weatherIcon = document.getElementById("weather-icon");
 const weatherDesc = document.getElementById("weather-description");
 const temperature = document.getElementById("temperature");
 const apparentTemperature = document.getElementById("apparent-temperature");
+const meanTemperature = document.getElementById("mean-temperature");
 // ...
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -62,9 +96,12 @@ fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${locationInput.value
         console.log(weather);
         const code = weather.current.weather_code;
         const description = weatherCodeMap[code] ?? "Unknown weather";
+        weatherIcon.style.display = "block";
+        weatherIcon.src = `https://open-meteo.com/images/weather-icons/${code}.png`;
         weatherDesc.textContent = `Weather: ${description}`;
         temperature.textContent = `Temperature: ${weather.current.temperature_2m}°C`;
         apparentTemperature.textContent = `Feels Like: ${weather.current.apparent_temperature}°C`;
+        meanTemperature.textContent = `Mean Temperature: ${weather.daily.temperature_2m_mean[0]}°C`;
         // ...
     })
     .catch(err => console.error(err));
