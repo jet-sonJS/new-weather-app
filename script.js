@@ -1,35 +1,4 @@
 const locationInput = document.getElementById("location-input");
-const customDropdown = document.getElementById("custom-dropdown");
-
-locationInput.addEventListener("input", () => {
-    const filter = locationInput.value.toLowerCase();
-    const options = customDropdown.getElementsByTagName("li");
-
-    let hasVisibleOptions = false;
-    for (let option of options) {
-        if (option.textContent.toLowerCase().includes(filter)) {
-            option.style.display = "block";
-            hasVisibleOptions = true;
-        } else {
-            option.style.display = "none";
-        }
-    }
-
-    customDropdown.classList.toggle("hidden", !hasVisibleOptions);
-});
-
-customDropdown.addEventListener("click", (event) => {
-    if (event.target.tagName === "LI") {
-        locationInput.value = event.target.textContent;
-        customDropdown.classList.add("hidden");
-    }
-});
-
-document.addEventListener("click", (event) => {
-    if (!customDropdown.contains(event.target) && event.target !== locationInput) {
-        customDropdown.classList.add("hidden");
-    }
-});
 
 const getWeatherBtn = document.getElementById("get-weather-btn");
 
@@ -49,33 +18,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function getWeather() {
     
-const weatherCodeMap = {
-  0: "Clear sky",
-  1: "Mostly clear",
-  2: "Partly cloudy",
-  3: "Overcast",
+const weatherInfo = {
+  0:  { desc: "Clear sky", img: "clear.gif" },
+  1:  { desc: "Mostly clear", img: "partly_cloudy.gif" },
+  2:  { desc: "Partly cloudy", img: "partly_cloudy.gif" },
+  3:  { desc: "Overcast", img: "cloudy.gif" },
 
-  45: "Fog",
+  45: { desc: "Fog", img: "fog.gif" },
 
-  51: "Light drizzle",
-  53: "Moderate drizzle",
-  55: "Heavy drizzle",
+  51: { desc: "Light drizzle", img: "drizzle.gif" },
+  53: { desc: "Moderate drizzle", img: "drizzle.gif" },
+  55: { desc: "Heavy drizzle", img: "drizzle.gif" },
 
-  61: "Light rain",
-  63: "Moderate rain",
-  65: "Heavy rain",
+  61: { desc: "Light rain", img: "rain.gif" },
+  63: { desc: "Moderate rain", img: "rain.gif" },
+  65: { desc: "Heavy rain", img: "rain.gif" },
 
-  71: "Light snow",
-  73: "Moderate snow",
-  75: "Heavy snow",
+  71: { desc: "Light snow", img: "snow.gif" },
+  73: { desc: "Moderate snow", img: "snow.gif" },
+  75: { desc: "Heavy snow", img: "snow.gif" },
 
-  80: "Light rain showers",
-  81: "Moderate rain showers",
-  82: "Heavy rain showers",
+  80: { desc: "Light rain showers", img: "showers.gif" },
+  81: { desc: "Moderate rain showers", img: "showers.gif" },
+  82: { desc: "Heavy rain showers", img: "showers.gif" },
 
-  95: "Thunderstorm",
-  96: "Thunderstorm with light hail",
-  99: "Thunderstorm with heavy hail"
+  95: { desc: "Thunderstorm", img: "thunder.gif" },
+  96: { desc: "Thunderstorm with light hail", img: "thunder_hail.gif" },
+  99: { desc: "Thunderstorm with heavy hail", img: "thunder_hail.gif" }
 };
 
 fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${locationInput.value}&count=1`)
@@ -95,10 +64,12 @@ fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${locationInput.value
     .then(weather => {
         console.log(weather);
         const code = weather.current.weather_code;
-        const description = weatherCodeMap[code] ?? "Unknown weather";
+        const info = weatherInfo[code] ?? { desc: "Unknown weather", img: "unknown.gif" };
+        weatherDesc.textContent = `Weather: ${info.desc}`;
+        resultsContainer.style.display = "block";
         weatherIcon.style.display = "block";
-        weatherIcon.src = `https://open-meteo.com/images/weather-icons/${code}.png`;
-        weatherDesc.textContent = `Weather: ${description}`;
+        weatherIcon.src = `images/${info.img}`;
+        weatherDesc.textContent = `Weather: ${info.desc}`;
         temperature.textContent = `Temperature: ${weather.current.temperature_2m}°C`;
         apparentTemperature.textContent = `Feels Like: ${weather.current.apparent_temperature}°C`;
         meanTemperature.textContent = `Mean Temperature: ${weather.daily.temperature_2m_mean[0]}°C`;
@@ -109,3 +80,7 @@ fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${locationInput.value
 };
 
 getWeatherBtn.onclick = getWeather;
+
+// Autocomplete not working, will implement it later
+// Need to fetch city names and filter them based on user input, then display suggestions in a dropdown.
+// Need to find a way to style datalist tags, because for some reason they are "impossible" to style, but I will find a workaround for that.
