@@ -81,6 +81,12 @@ fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${locationInput.value
 
 getWeatherBtn.onclick = getWeather;
 
+locationInput.addEventListener("keypress", (event) => {
+  if (event.key === "Enter") {
+    getWeather();
+  }
+});
+
 // Autocomplete not working, will implement it later
 // Need to fetch city names and filter them based on user input, then display suggestions in a dropdown.
 // Need to find a way to style datalist tags, because for some reason they are "impossible" to style, but I will find a workaround for that.
