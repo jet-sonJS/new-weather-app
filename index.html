@@ -11,7 +11,8 @@
     <div id="container">
         <div id="weather-form">
             <h1>Weather App</h1>
-            <input type="text" id="location-input" placeholder="Search location..." autocomplete="off" name="auto-complete">
+            <input type="text" id="location-input" placeholder="Search location..." autocomplete="off" name="auto-complete" list="autocomplete">
+            <datalist id="autocomplete"></datalist>
             <input type="button" id="get-weather-btn" value="Get Weather">
         </div><br><br>
         <div id="results">

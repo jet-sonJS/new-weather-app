@@ -106,3 +106,7 @@ h1 {
 #weather-icon {
   width: 520px;
 }
+
+datalist {
+  overflow: auto;
+}

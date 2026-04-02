@@ -1,4 +1,6 @@
 const locationInput = document.getElementById("location-input");
+const datalist = document.getElementById("autocomplete");
+let cityMap = {};
 
 const getWeatherBtn = document.getElementById("get-weather-btn");
 
@@ -14,6 +16,48 @@ const meanTemperature = document.getElementById("mean-temperature");
 document.addEventListener("DOMContentLoaded", () => {
     console.log("DOM Content loaded successfully.");
     locationInput.value = "";
+});
+
+function spread(x, delay) {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => x(...args), delay);
+  };
+}
+
+function fetchCities(query) {
+  if (query.length < 2) {
+    datalist.innerHTML = "";
+    return;
+  }
+
+  fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${query}&count=7`)
+    .then(res => res.json())
+    .then(data => {
+      datalist.innerHTML = "";
+      cityMap = {};
+
+      (data.results || []).forEach(loc => {
+        const cityOption = document.createElement("option");
+        cityOption.value = `${loc.name}`;
+        datalist.appendChild(cityOption);
+
+        const countryOption = document.createElement("option");
+        countryOption.value = `${loc.country}`;
+        datalist.appendChild(countryOption);
+
+        cityMap[loc.name] = loc;
+        cityMap[loc.country] = loc;
+      });
+    })
+    .catch(err => console.error(err));
+}
+
+const debouncedFetchCities = spread(fetchCities, 300);
+
+locationInput.addEventListener("input", (e) => {
+  debouncedFetchCities(e.target.value);
 });
 
 function getWeather() {
